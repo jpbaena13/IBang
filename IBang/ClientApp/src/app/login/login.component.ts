@@ -6,6 +6,11 @@ import { first } from 'rxjs/operators';
 
 import { AuthenticationService } from '../_services/AuthenticationService';
 
+interface UserResponse {
+  username: string,
+  password: string
+}
+
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
@@ -58,6 +63,19 @@ export class LoginComponent implements OnInit {
       },
       error => console.error(error)
     );
+  }
+
+  createUser() {
+    this.http.post<UserResponse>(this.baseUrl + 'api/users', {
+      username: 'ibang',
+      password: '1234'
+    }, httpOptions)
+      .subscribe(
+        user => {
+          alert("usuario: " + user.username + "  -  contraseña: " + user.password);
+        },
+        error => console.error(error)
+      );
   }
 
 }

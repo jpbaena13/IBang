@@ -5,6 +5,12 @@ import { FormControl } from '@angular/forms';
 
 import { AuthenticationService } from '../_services/AuthenticationService';
 
+interface TimeResponse {
+  activityDate: string,
+  value: string,
+  error: any
+}
+
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type': 'application/json',
@@ -54,7 +60,7 @@ export class TimesComponent implements OnInit {
 
     var activityid = this.route.snapshot.params['activityid'];
 
-    this.http.post(this.baseUrl + 'api/times', {
+    this.http.post <TimeResponse>(this.baseUrl + 'api/times', {
       activityid: activityid,
       activitydate: this.activityDate.value,
       value: this.value.value
