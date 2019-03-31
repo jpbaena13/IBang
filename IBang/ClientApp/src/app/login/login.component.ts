@@ -1,5 +1,17 @@
-import { Component, OnInit, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, Inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { first } from 'rxjs/operators';
+
+import { AuthenticationService } from '../_services/AuthenticationService';
+
+const httpOptions = {
+  headers: new HttpHeaders({
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  })
+};
 
 @Component({
   selector: 'app-login',
@@ -8,15 +20,44 @@ import { HttpClient } from '@angular/common/http';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private http: HttpClient) { }
+  loginForm: FormGroup;
+  error: boolean;
+
+  constructor(
+      private http: HttpClient,
+      @Inject('BASE_URL') private baseUrl: string,
+      private formBuilder: FormBuilder,
+      private router: Router,
+      private authenticationService: AuthenticationService) {
+
+    if (this.authenticationService.currentUserValue) {
+      this.router.navigate(['/home']);
+    }
+  }
 
   ngOnInit() {
+    this.loginForm = this.formBuilder.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required]
+    });
+
+    this.error = false;
   }
 
   onSubmit() {
-    this.http.get('https://latienditadelamor.azurewebsites.net/api/resources').subscribe(result => {
-      console.log(result);
-    }, error => console.error(error));
+    this.http.post(this.baseUrl + 'api/users/authenticate', {
+      username: this.loginForm.controls.username.value,
+      password: this.loginForm.controls.password.value
+    }, httpOptions)
+      .pipe(first())
+      .subscribe(
+      user => {
+        if (!user) return this.error = true;
+        this.authenticationService.login(user);
+        this.router.navigate(['/home']);
+      },
+      error => console.error(error)
+    );
   }
 
 }

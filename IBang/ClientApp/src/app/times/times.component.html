@@ -1,0 +1,44 @@
+<div class="jb-wrapper">
+  <button class="btn btn-primary btn-logout" (click)="logout()">Salir</button>
+  <button class="btn btn-primary btn-logout" (click)="goBack()">Volver</button>
+
+  <h1>Horas</h1>
+  <form (ngSubmit)="createTime()">
+    <div class="row">
+      <div class="col-sm-4 form-group">
+        <label for="">Fechas</label>
+        <input type="date" class="form-control" [formControl]="activityDate" />
+      </div>
+      <div class="col-sm-4 form-group">
+        <label for="">Horas</label>
+        <input type="text" class="form-control" [formControl]="value" />
+      </div>
+      <div class="col-sm-4 form-group" style="margin-top:1.5em;">
+        <button class="btn btn-primary">Crear</button>
+      </div>
+    </div>
+  </form>
+
+  <div *ngIf="error > -1" class="error">
+    Excedió el número de horas por actividad, para esta actividad tiene disponible {{error}} horas
+  </div>
+
+  <div class="jb-list">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Fecha</th>
+          <th scope="col">Horas</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let time of times">
+          <td scope="row">{{time.id}}</td>
+          <td>{{time.activityDate.substr(0, 10)}}</td>
+          <td>{{time.value}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

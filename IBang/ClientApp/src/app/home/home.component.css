@@ -1,15 +1,9 @@
-.error {
-  color: red;
-}
-
 .jb-wrapper {
   border: thin solid #ccc;
   margin: 2em auto;
   padding: 2em;
   width: 600px;
 }
-
 .btn-logout {
   float: right;
-  margin-left: 1em;
 }

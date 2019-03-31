@@ -10,11 +10,12 @@ namespace IBang.Models
     {
         public int Id { get; set; }
         public int Value { get; set; }
-        public Activity Activity { get; set; }
 
         [DataType(DataType.Date)]
         public DateTime ActivityDate { get; set; }
-        
 
+        //Foreign Key
+        public int ActivityId { get; set; }
+        public Activity Activity { get; set; }
     }
 }
